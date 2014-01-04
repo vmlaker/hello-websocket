@@ -1,0 +1,4 @@
+numpy
+gevent
+gevent-websocket
+Flask
