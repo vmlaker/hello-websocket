@@ -1,7 +1,8 @@
 hello-websocket
 ===============
 
-WebSocket and OpenCV camera capture.
+Webcam over WebSocket using OpenCV and 
+`Tornado <http://www.tornadoweb.org>`_.
 
 Installation
 ------------
@@ -24,4 +25,4 @@ Run the server:
 
    make server
 
-Go to http://localhost:5000.
+Go to http://localhost:9000.
