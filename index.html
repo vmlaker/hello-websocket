@@ -5,7 +5,8 @@
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script type="text/javascript" charset="utf-8">
       $(document).ready(function(){
-         var ws_path = 'ws://' + window.location.host + '/ws';
+         var ws_path = 'ws://' + window.location.host + window.location.pathname + 'ws';
+         //alert(ws_path);
          var ws = new WebSocket(ws_path);
          ws.onmessage = function(event){
             $("#cam").attr('src', 'data:image/jpg;base64,' + event.data);
