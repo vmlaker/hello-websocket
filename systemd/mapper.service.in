@@ -1,0 +1,11 @@
+[Unit]
+Description=WebSocket Webcam Mapper
+
+[Service]
+Type=simple
+User=@USER@
+Group=@GROUP@
+ExecStart=@PYTHON@ @MAPPER@ @PORT@
+
+[Install]
+WantedBy=multi-user.target

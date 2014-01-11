@@ -1,0 +1,12 @@
+[Unit]
+Description=WebSocket Webcam Recorder
+Requires=@MAPPER_SERVICE@
+
+[Service]
+Type=simple
+User=@USER@
+Group=@GROUP@
+ExecStart=@PYTHON@ @RECORDER@ @PORT@
+
+[Install]
+WantedBy=multi-user.target
