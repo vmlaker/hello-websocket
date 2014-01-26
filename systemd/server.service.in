@@ -2,6 +2,8 @@
 Description=WebSocket Webcam Server
 Requires=@MAPPER_SERVICE@
 Requires=@RECORDER_SERVICE@
+After=@MAPPER_SERVICE@
+After=@RECORDER_SERVICE@
 
 [Service]
 Type=simple
