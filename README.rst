@@ -10,12 +10,14 @@ Details
 The code runs a *recorder* process that continuously reads images
 from the webcam. Upon every capture it updates the *mapper*, a tiny
 local storage server which keeps the latest captured image
-in memory. The *mapper* is accessible via low-level (local) socket interface.
+in memory. The *mapper* is accessible via plain socket interface.
 
 Separately, a *server* process (running Tornado) handles WebSocket messages. 
 Upon receiving a request message (sent from *client* web browser)
-it connects to the local *mapper*, retrieves latest image and sends it 
+it connects to the *mapper*, retrieves latest image and sends it 
 to the *client* over WebSocket connection.
+
+.. image:: https://raw.github.com/vmlaker/hello-websocket/master/diagram.png
 
 The *client* web page is dead simple: 
 It sends an initial request on a WebSocket.
