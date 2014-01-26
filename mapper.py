@@ -1,8 +1,14 @@
 """
-Run the socket server on given port.
+Run the socket dictionary server on given port.
+
+Usage:
+
+   python mapper.py <host> <port>
+
 """
 
 import sys
-from coils import MapSockServer
-server = MapSockServer('localhost', int(sys.argv[1]), encode=False)
+import coils
+
+server = coils.MapSockServer(sys.argv[1], int(sys.argv[2]), encode=False)
 server.run()
