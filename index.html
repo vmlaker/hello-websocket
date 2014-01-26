@@ -19,6 +19,7 @@
             };
             ws.onerror = function (e) {
                console.log(e);
+               ws.send(1);
             };
          } else {
              alert("WebSocket not supported");
