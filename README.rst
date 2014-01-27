@@ -1,7 +1,7 @@
 hello-websocket
 ===============
 
-Webcam over WebSocket in Python, using OpenCV and 
+Webcam over websocket in Python, using OpenCV and 
 `Tornado <http://www.tornadoweb.org>`_.
 
 Details
@@ -12,17 +12,17 @@ from the webcam. Upon every capture it updates the *mapper*, a tiny
 local storage server which keeps the latest captured image
 in memory. The *mapper* is accessible via plain socket interface.
 
-Separately, a *server* process (running Tornado) handles WebSocket messages. 
+Separately, a *server* process (running Tornado) handles websocket messages. 
 Upon receiving a request message (sent from *client* web browser)
 it connects to the *mapper*, retrieves latest image and sends it 
-to the *client* over WebSocket connection.
+to the *client* over websocket connection.
 
 .. image:: https://raw.github.com/vmlaker/hello-websocket/master/diagram.png
 
 The *client* web page is dead simple: 
 It sends an initial request on a WebSocket.
 When image data comes in, it assigns it to ``src`` attribute of the
-``<img>`` tag, then simply sends the next request. Voilà!
+``<img>`` tag, then simply sends the next request. That's it!
 
 Installation
 ------------
@@ -77,3 +77,33 @@ Finally (in a third shell) run the *server*:
    make server
    
 Go to http://localhost:9000 to view the webcam.
+
+systemd services
+----------------
+
+If your O/S has 
+`systemd <http://freedesktop.org/wiki/Software/systemd>`_
+(e.g. Fedora), you have the option of installing 
+*mapper*, *recorder* and *server* as systemd services.
+Begin by customizing settings in file ``systemd/hello.conf``.
+Then, from the project root directory, generate your service files:
+::
+
+   python systemd/create.py
+   
+Install your newly-created services into your systemd location:
+::
+
+   sudo cp `pwd`/systemd/*.service /usr/lib/systemd/system/
+
+You can now start all three services by starting the *server*
+(*mapper* and *recorder* are dependencies, and will start automatically):
+::
+
+   sudo systemctl start hws-server
+
+To shut down all three services, just stop the *mapper*
+(*recorder* and *server* depend on *mapper*, and will stop automatically):
+::
+
+   sudo systemctl stop hws-mapper

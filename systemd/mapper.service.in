@@ -5,7 +5,7 @@ Description=WebSocket Webcam Mapper
 Type=simple
 User=@USER@
 Group=@GROUP@
-ExecStart=@PYTHON@ @MAPPER@ @PORT@
+ExecStart=@PYTHON@ @MAPPER@ @HOST@ @PORT@
 
 [Install]
 WantedBy=multi-user.target
