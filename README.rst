@@ -36,14 +36,11 @@ into the virtual environment):
 
    yum install opencv-python
 
-Now go ahead and grab the source code repo,
-and the additional auxiliary
-`Coils <http://vmlaker.github.io/coils>`_ repo:
+Now go ahead and grab the source code repo:
 ::
 
    git clone https://github.com/vmlaker/hello-websocket
    cd hello-websocket
-   git clone https://github.com/vmlaker/coils
 
 Build the virtual environment with all needed modules:
 ::
