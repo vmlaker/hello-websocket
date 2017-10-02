@@ -6,10 +6,11 @@ Usage:
 
 import StringIO
 import sys
+import time
 
 import coils
 import cv2
-import numpy
+import numpy as np
 import redis
 
 
@@ -26,19 +27,19 @@ if width: cap.set(3, width)
 if height: cap.set(4, height)
 
 # Monitor the framerate at 1s, 5s, 10s intervals.
-fps = coils.RateTicker((1,5,10))
+fps = coils.RateTicker((1, 5, 10))
 
 # Repeatedly capture current image, 
-# encode and push on socket connection.
+# encode, serialize and push to Redis database.
 while True:
     hello, image = cap.read()
     if image is None:
-        import time
         time.sleep(0.5)
         continue
+    
     hello, image = cv2.imencode('.jpg', image)
     sio = StringIO.StringIO()
-    numpy.save(sio, image)
+    np.save(sio, image)
     value = sio.getvalue()
     store.set('image', value)
 

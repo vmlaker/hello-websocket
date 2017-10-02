@@ -9,7 +9,7 @@ import StringIO
 import sys
 
 import coils
-import numpy
+import numpy as np
 import redis
 from tornado import websocket, web, ioloop
 
@@ -25,12 +25,14 @@ class SocketHandler(websocket.WebSocketHandler):
         """ Initialize the Redis store and framerate monitor. """
         super(SocketHandler, self).__init__(*args, **kwargs)
         self._store = redis.Redis()
-        self._fps = coils.RateTicker((1,5,10))
+        self._fps = coils.RateTicker((1, 5, 10))
 
     def on_message(self, message):
+        """ Retrieve image from database, de-serialize,
+        encode and send to client. """
         image = self._store.get('image')
         image = StringIO.StringIO(image)
-        image = numpy.load(image)
+        image = np.load(image)
         image = base64.b64encode(image)
         self.write_message(image)
 
