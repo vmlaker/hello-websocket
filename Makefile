@@ -22,20 +22,13 @@ venv: requirements.txt
 test: $(VENV_CV2)
 	. venv/bin/activate && python -c 'import cv2; print(cv2)'
 
-MAP_HOST = 127.0.0.1
-MAP_PORT = 50003
-
-mapper: venv
-	test -d venv || virtualenv venv
-	. venv/bin/activate && python mapper.py $(MAP_HOST) $(MAP_PORT)
-
 recorder: venv
 	test -d venv || virtualenv venv
-	. venv/bin/activate && python recorder.py $(MAP_HOST) $(MAP_PORT)
+	. venv/bin/activate && python recorder.py
 
 server: venv
 	test -d venv || virtualenv venv
-	. venv/bin/activate && python server.py $(MAP_HOST) $(MAP_PORT)
+	. venv/bin/activate && python server.py
 
 clean:
 	rm -rf venv

@@ -1,31 +1,25 @@
 """
-Continuously capture images from a webcam
-and update a socket dictionary server with the current snapshot.
-
+Continuously capture images from a webcam and write to a Redis store.
 Usage:
-
-   python recorder.py <host> <port> [<width>] [<height>]
-
+   python recorder.py [width] [height]
 """
 
-# Import standard modules.
-import sys
 import StringIO
+import sys
 
-# Import third-party modules.
-import numpy
-import cv2
 import coils
+import cv2
+import numpy
+import redis
+
 
 # Retrieve command line arguments.
-host = sys.argv[1]
-port = int(sys.argv[2])
-width = None if len(sys.argv) <= 3 else int(sys.argv[3])
-height = None if len(sys.argv) <= 4 else int(sys.argv[4])
+width = None if len(sys.argv) <= 1 else int(sys.argv[1])
+height = None if len(sys.argv) <= 2 else int(sys.argv[2])
 
-# Create video capture object and socket client.
+# Create video capture object and client to the Redis store.
 cap = cv2.VideoCapture(-1)
-map_client = coils.MapSockClient(host, port, encode=False)
+store = redis.Redis()
 
 # Set video dimensions, if given.
 if width: cap.set(3, width)
@@ -46,12 +40,7 @@ while True:
     sio = StringIO.StringIO()
     numpy.save(sio, image)
     value = sio.getvalue()
-    request = coils.MapSockRequest(
-        'set',
-        'image',
-        value,
-        )
-    response = map_client.send(request)
+    store.set('image', value)
 
     # Print the framerate.
     text = '{:.2f}, {:.2f}, {:.2f} fps'.format(*fps.tick())

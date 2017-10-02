@@ -1,45 +1,36 @@
 """
-Serve webcam images (from a remote socket dictionary server)
-using Tornado (to a WebSocket browser client.)
-
+Serve webcam images from a Redis store using Tornado.
 Usage:
-
-   python server.py <host> <port>
-
+   python server.py
 """
 
-# Import standard modules.
-import sys
 import base64
 import StringIO
+import sys
 
-# Import 3rd-party modules.
-from tornado import websocket, web, ioloop
-import numpy
 import coils
+import numpy
+import redis
+from tornado import websocket, web, ioloop
 
-# Retrieve command line arguments.
-host = sys.argv[1]
-port = int(sys.argv[2])
 
 class IndexHandler(web.RequestHandler):
     def get(self):
         self.render('index.html')
 
 class SocketHandler(websocket.WebSocketHandler):
+    """ Handler for websocket queries. """
+    
     def __init__(self, *args, **kwargs):
+        """ Initialize the Redis store and framerate monitor. """
         super(SocketHandler, self).__init__(*args, **kwargs)
-
-        # Client to the socket server.
-        self._map_client = coils.MapSockClient(host, port, encode=False)
-
-        # Monitor the framerate at 1s, 5s, 10s intervals.
+        self._store = redis.Redis()
         self._fps = coils.RateTicker((1,5,10))
 
     def on_message(self, message):
-        response = self._map_client.send(coils.MapSockRequest('get', 'image'))
-        sio = StringIO.StringIO(response)
-        image = numpy.load(sio)
+        image = self._store.get('image')
+        image = StringIO.StringIO(image)
+        image = numpy.load(image)
         image = base64.b64encode(image)
         self.write_message(image)
 

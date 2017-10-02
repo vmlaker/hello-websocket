@@ -8,13 +8,12 @@ Details
 -------
 
 The code runs a *recorder* process that continuously reads images
-from the webcam. Upon every capture it updates the *mapper*, a tiny
-local storage server which keeps the latest captured image
-in memory. The *mapper* is accessible via plain socket interface.
+from the webcam. Upon every capture it writes the image to a Redis
+key-value store.
 
 Separately, a *server* process (running Tornado) handles websocket messages. 
 Upon receiving a request message (sent from *client* web browser)
-it connects to the *mapper*, retrieves latest image and sends it 
+it retrieves the latest image from the Redis database and sends it 
 to the *client* over websocket connection.
 
 .. image:: https://raw.github.com/vmlaker/hello-websocket/master/diagram.png
@@ -34,7 +33,12 @@ it system-wide. (Later below, *make* will manually pull the library
 into the virtual environment):
 ::
 
-   yum install opencv-python
+   apt-get install python-opencv
+
+Also install Redis server:
+::
+
+   apt-get install redis-server
 
 Now go ahead and grab the source code repo:
 ::
@@ -50,25 +54,18 @@ Build the virtual environment with all needed modules:
 Usage
 -----
 
-There are three separate programs that need to be running:
+There are two separate programs that need to be running:
 
-#. *mapper* - a lightweight server that keeps the current captured 
-   image in memory and serves it to multiple local clients.
-#. *recorder* - webcam capture process that feeds the *mapper*.
+#. *recorder* - webcam capture process that writes to Redis database.
 #. *server* - the Tornado server which reads current image from 
-   the *mapper* and serves to requesting WebSocket clients.
+   the Redis database and serves to requesting WebSocket clients.
 
-First run the *mapper*:
-::
-
-   make mapper
-
-Now (in a different shell) run the *recorder*:
+First run the *recorder*:
 ::
 
    make recorder
 
-Finally (in a third shell) run the *server*:
+Now (in a different shell) run the *server*:
 ::
 
    make server
@@ -80,8 +77,8 @@ systemd services
 
 If your O/S has 
 `systemd <http://freedesktop.org/wiki/Software/systemd>`_
-(e.g. Fedora), you have the option of installing 
-*mapper*, *recorder* and *server* as systemd services.
+you have the option of installing 
+*recorder* and *server* as systemd services.
 Begin by customizing settings in file ``systemd/hello.conf``.
 Then, from the project root directory, generate your service files:
 ::
@@ -93,8 +90,8 @@ Install your newly-created services into your systemd location:
 
    sudo cp `pwd`/systemd/*.service /usr/lib/systemd/system/
 
-You can now start all three services by starting the *server*
-(*mapper* and *recorder* are dependencies, and will start automatically):
+You can now start the two services by starting the *server*
+(*recorder* is a dependency, and will start automatically):
 ::
 
    sudo systemctl start hws-server
