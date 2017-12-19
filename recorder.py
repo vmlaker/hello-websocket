@@ -19,8 +19,22 @@ import redis
 width = None if len(sys.argv) <= 1 else int(sys.argv[1])
 height = None if len(sys.argv) <= 2 else int(sys.argv[2])
 
-# Create video capture object and client to the Redis store.
-cap = cv2.VideoCapture(-1)
+# Create video capture object, retrying until successful.
+max_sleep = 5.0
+cur_sleep = 0.1
+while True:
+    cap = cv2.VideoCapture(-1)
+    if cap.isOpened():
+        break
+    print('not opened, sleeping {}s'.format(cur_sleep))
+    time.sleep(cur_sleep)
+    if cur_sleep < max_sleep:
+        cur_sleep *= 2
+        cur_sleep = min(cur_sleep, max_sleep)
+        continue
+    cur_sleep = 0.1
+
+# Create client to the Redis store.
 store = redis.Redis()
 
 # Set video dimensions, if given.
