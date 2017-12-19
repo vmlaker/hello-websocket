@@ -4,6 +4,7 @@ Usage:
    python recorder.py [width] [height]
 """
 
+import os
 import StringIO
 import sys
 import time
@@ -31,18 +32,20 @@ fps = coils.RateTicker((1, 5, 10))
 
 # Repeatedly capture current image, 
 # encode, serialize and push to Redis database.
+# Then create unique ID, and push to database as well.
 while True:
     hello, image = cap.read()
     if image is None:
         time.sleep(0.5)
         continue
-    
     hello, image = cv2.imencode('.jpg', image)
     sio = StringIO.StringIO()
     np.save(sio, image)
     value = sio.getvalue()
     store.set('image', value)
-
+    image_id = os.urandom(4)
+    store.set('image_id', image_id)
+    
     # Print the framerate.
     text = '{:.2f}, {:.2f}, {:.2f} fps'.format(*fps.tick())
     print(text)
