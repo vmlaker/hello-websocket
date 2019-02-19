@@ -16,7 +16,7 @@ Upon receiving a request message (sent from *client* web browser)
 it retrieves the latest image from the Redis database and sends it 
 to the *client* over websocket connection.
 
-.. image:: https://raw.github.com/vmlaker/hello-websocket/master/diagram.png
+.. image:: https://github.com/vmlaker/hello-websocket/blob/master/diagram.png?raw=true
 
 The *client* web page is dead simple: 
 It sends an initial request on a WebSocket.
