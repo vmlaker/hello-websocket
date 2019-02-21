@@ -5,9 +5,7 @@ Usage:
 """
 
 import base64
-import os
 import StringIO
-import sys
 import time
 
 import coils
