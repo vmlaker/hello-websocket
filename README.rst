@@ -27,10 +27,9 @@ Installation
 ------------
 
 The code uses Python and third-party modules installed in a 
-``virtualenv`` with ``pip``. But since OpenCV is not part 
-of the Python Package Index, you're gonna need to install 
-it system-wide. (Later below, *make* will manually pull the library
-into the virtual environment):
+``virtualenv``. But since OpenCV is not part of the Python Package Index,
+you're gonna need to install it system-wide. (Later below, *make* will
+manually pull the library into the virtual environment):
 ::
 
    apt-get install python-opencv
@@ -71,33 +70,3 @@ Now (in a different shell) run the *server*:
    make server
    
 Go to http://localhost:9000 to view the webcam.
-
-systemd services
-----------------
-
-If your O/S has 
-`systemd <http://freedesktop.org/wiki/Software/systemd>`_
-you have the option of installing 
-*recorder* and *server* as systemd services.
-Begin by customizing settings in file ``systemd/hello.conf``.
-Then, from the project root directory, generate your service files:
-::
-
-   python systemd/create.py
-   
-Install your newly-created services into your systemd location:
-::
-
-   sudo cp `pwd`/systemd/*.service /usr/lib/systemd/system/
-
-You can now start the two services by starting the *server*
-(*recorder* is a dependency, and will start automatically):
-::
-
-   sudo systemctl start hws-server
-
-To shut down all three services, just stop the *mapper*
-(*recorder* and *server* depend on *mapper*, and will stop automatically):
-::
-
-   sudo systemctl stop hws-mapper
