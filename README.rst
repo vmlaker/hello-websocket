@@ -7,20 +7,19 @@ Webcam over websocket in Python, using OpenCV and
 Details
 -------
 
-The code runs a *recorder* process that continuously reads images
-from the webcam. Upon every capture it writes the image to a Redis
-key-value store.
+A *recorder* process continuously reads images from a webcam.
+Upon every capture, it writes the image to a Redis key-value store.
 
-Separately, a *server* process (running Tornado) handles websocket messages. 
-Upon receiving a request message (sent from *client* web browser)
-it retrieves the latest image from the Redis database and sends it 
-to the *client* over websocket connection.
+A separate *server* process (running Tornado) handles websocket requests
+sent by the *client*, i.e. web browser. Upon receiving the request, it retrieves
+the latest image from the Redis database and sends it to the client over the
+established websocket connection.
 
 .. image:: https://github.com/vmlaker/hello-websocket/blob/master/diagram.png?raw=true
 
 The *client* web page is dead simple: 
-It sends an initial request on a WebSocket.
-When image data comes in, it assigns it to ``src`` attribute of the
+It sends an initial request on a websocket.
+When image data arrives, it assigns it to ``src`` attribute of the
 ``<img>`` tag, then simply sends the next request. That's it!
 
 Installation
