@@ -1,4 +1,4 @@
 coils==1.0.9
-numpy==1.12.0rc2
-redis==2.10.6
-tornado==4.4.2
+numpy==1.19.0
+redis==3.5.3
+tornado==6.0.4
