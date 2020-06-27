@@ -5,7 +5,6 @@ Usage:
 """
 
 import os
-import StringIO
 import sys
 import time
 
@@ -53,9 +52,7 @@ while True:
         time.sleep(0.5)
         continue
     hello, image = cv2.imencode('.jpg', image)
-    sio = StringIO.StringIO()
-    np.save(sio, image)
-    value = sio.getvalue()
+    value = np.array(image).tobytes()
     store.set('image', value)
     image_id = os.urandom(4)
     store.set('image_id', image_id)
