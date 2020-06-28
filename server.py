@@ -8,19 +8,18 @@ import base64
 import time
 
 import coils
-import numpy as np
 import redis
 from tornado import websocket, web, ioloop
-
 
 MAX_FPS = 100
 
 class IndexHandler(web.RequestHandler):
+    """ Handler for the root static page. """
     def get(self):
         self.render('index.html')
 
 class SocketHandler(websocket.WebSocketHandler):
-    """ Handler for websocket queries. """
+    """ Handler for the websocket URL. """
     
     def __init__(self, *args, **kwargs):
         """ Initialize the Redis store and framerate monitor. """

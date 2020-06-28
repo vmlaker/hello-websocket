@@ -43,9 +43,8 @@ if height: cap.set(4, height)
 # Monitor the framerate at 1s, 5s, 10s intervals.
 fps = coils.RateTicker((1, 5, 10))
 
-# Repeatedly capture current image, 
-# encode, serialize and push to Redis database.
-# Then create unique ID, and push to database as well.
+# Repeatedly capture current image, encode it, convert it to bytes and push
+# it to Redis database. Then create unique ID, and push it to database as well.
 while True:
     hello, image = cap.read()
     if image is None:
