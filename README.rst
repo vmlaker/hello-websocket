@@ -22,16 +22,7 @@ When image data arrives, it assigns it to ``src`` attribute of the
 
 Installation
 ------------
-The code uses Python in a virtualenv. Since OpenCV is not officially in the
-`Python Package Index <http://pypi.org>`_, we manually copy the system OpenCV
-library into the virtualenv.
-
-First, install OpenCV for Python system-wide:
-::
-
-   apt-get install python-opencv
-
-Also install Redis server:
+Install Redis server:
 ::
 
    apt-get install redis-server
