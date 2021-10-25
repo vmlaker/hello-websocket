@@ -7,7 +7,6 @@ Usage:
 import base64
 import time
 
-import coils
 import redis
 from tornado import websocket, web, ioloop
 
@@ -27,7 +26,6 @@ class SocketHandler(websocket.WebSocketHandler):
 
         super().__init__(*args, **kwargs)
         self._store = redis.Redis()
-        self._fps = coils.RateTicker((1, 5, 10))
         self._prev_image_id = None
 
     def on_message(self, message):
@@ -43,9 +41,7 @@ class SocketHandler(websocket.WebSocketHandler):
         image = self._store.get('image')
         image = base64.b64encode(image)
         self.write_message(image)
-
-        # Print object ID and the framerate.
-        print('{} {:.2f}, {:.2f}, {:.2f} fps'.format(id(self), *self._fps.tick()))
+        print(image_id)
 
 app = web.Application([
     (r'/', IndexHandler),

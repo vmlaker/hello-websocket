@@ -4,11 +4,11 @@ Usage:
    python recorder.py [width] [height]
 """
 
+import itertools
 import os
 import sys
 import time
 
-import coils
 import cv2
 import numpy as np
 import redis
@@ -42,21 +42,14 @@ if WIDTH:
 if HEIGHT:
     cap.set(4, HEIGHT)
 
-# Monitor the framerate at 1s, 5s, 10s intervals.
-fps = coils.RateTicker((1, 5, 10))
-
 # Repeatedly capture current image, encode it, convert it to bytes and push
 # it to Redis database. Then create unique ID, and push it to database as well.
-while True:
-    hello, image = cap.read()
+for count in itertools.count(1):
+    _, image = cap.read()
     if image is None:
         time.sleep(0.5)
         continue
-    hello, image = cv2.imencode('.jpg', image)
-    VALUE = np.array(image).tobytes()
-    store.set('image', VALUE)
-    image_id = os.urandom(4)
-    store.set('image_id', image_id)
-
-    # Print the framerate.
-    print('{:.2f}, {:.2f}, {:.2f} fps'.format(*fps.tick()))
+    _, image = cv2.imencode('.jpg', image)
+    store.set('image', np.array(image).tobytes())
+    store.set('image_id', os.urandom(4))
+    print(count)
