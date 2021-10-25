@@ -15,30 +15,32 @@ import redis
 
 
 # Retrieve command line arguments.
-width = None if len(sys.argv) <= 1 else int(sys.argv[1])
-height = None if len(sys.argv) <= 2 else int(sys.argv[2])
+WIDTH = None if len(sys.argv) <= 1 else int(sys.argv[1])
+HEIGHT = None if len(sys.argv) <= 2 else int(sys.argv[2])
 
 # Create video capture object, retrying until successful.
-max_sleep = 5.0
-cur_sleep = 0.1
+MAX_SLEEP = 5.0
+CUR_SLEEP = 0.1
 while True:
     cap = cv2.VideoCapture(-1)
     if cap.isOpened():
         break
-    print('not opened, sleeping {}s'.format(cur_sleep))
-    time.sleep(cur_sleep)
-    if cur_sleep < max_sleep:
-        cur_sleep *= 2
-        cur_sleep = min(cur_sleep, max_sleep)
+    print(f'not opened, sleeping {CUR_SLEEP}s')
+    time.sleep(CUR_SLEEP)
+    if CUR_SLEEP < MAX_SLEEP:
+        CUR_SLEEP *= 2
+        CUR_SLEEP = min(CUR_SLEEP, MAX_SLEEP)
         continue
-    cur_sleep = 0.1
+    CUR_SLEEP = 0.1
 
 # Create client to the Redis store.
 store = redis.Redis()
 
 # Set video dimensions, if given.
-if width: cap.set(3, width)
-if height: cap.set(4, height)
+if WIDTH:
+    cap.set(3, WIDTH)
+if HEIGHT:
+    cap.set(4, HEIGHT)
 
 # Monitor the framerate at 1s, 5s, 10s intervals.
 fps = coils.RateTicker((1, 5, 10))
@@ -51,11 +53,10 @@ while True:
         time.sleep(0.5)
         continue
     hello, image = cv2.imencode('.jpg', image)
-    value = np.array(image).tobytes()
-    store.set('image', value)
+    VALUE = np.array(image).tobytes()
+    store.set('image', VALUE)
     image_id = os.urandom(4)
     store.set('image_id', image_id)
-    
+
     # Print the framerate.
-    text = '{:.2f}, {:.2f}, {:.2f} fps'.format(*fps.tick())
-    print(text)
+    print('{:.2f}, {:.2f}, {:.2f} fps'.format(*fps.tick()))

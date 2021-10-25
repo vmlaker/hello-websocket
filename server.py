@@ -16,15 +16,16 @@ MAX_FPS = 100
 class IndexHandler(web.RequestHandler):
     """ Handler for the root static page. """
     def get(self):
+        """ Retrieve the page content. """
         self.render('index.html')
 
 class SocketHandler(websocket.WebSocketHandler):
     """ Handler for the websocket URL. """
-    
+
     def __init__(self, *args, **kwargs):
         """ Initialize the Redis store and framerate monitor. """
 
-        super(SocketHandler, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._store = redis.Redis()
         self._fps = coils.RateTicker((1, 5, 10))
         self._prev_image_id = None
@@ -44,8 +45,7 @@ class SocketHandler(websocket.WebSocketHandler):
         self.write_message(image)
 
         # Print object ID and the framerate.
-        text = '{} {:.2f}, {:.2f}, {:.2f} fps'.format(id(self), *self._fps.tick())
-        print(text)
+        print('{} {:.2f}, {:.2f}, {:.2f} fps'.format(id(self), *self._fps.tick()))
 
 app = web.Application([
     (r'/', IndexHandler),

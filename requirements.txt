@@ -1,4 +1,5 @@
-coils==1.0.9
 numpy==1.19.0
+pylint==2.11.1
+pytype==2021.10.18
 redis==3.5.3
 tornado==6.0.4
