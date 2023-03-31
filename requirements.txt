@@ -2,5 +2,5 @@ numpy==1.21.3
 opencv-python==4.5.4.58
 pylint==2.11.1
 pytype==2021.10.18
-redis==3.5.3
+redis==4.4.4
 tornado==6.1
