@@ -3,10 +3,8 @@
 #  Makefile for hello-websocket.
 #
 #####################################################################
-THE_PYTHON = python3.8
-
 .venv: requirements.txt
-	virtualenv .venv -p $(THE_PYTHON)
+	python3 -m venv .venv
 	.venv/bin/pip install -r requirements.txt
 
 test: .venv
