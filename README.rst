@@ -22,13 +22,11 @@ When image data arrives, it assigns it to ``src`` attribute of the
 
 Installation
 ------------
-Install Redis server:
-::
+Install Redis server::
 
-   apt-get install redis-server
+   apt install redis-server
 
-Build the virtual environment with all needed modules:
-::
+Build the virtual environment with all needed modules::
 
    make
 
@@ -38,13 +36,11 @@ Two separate programs need to be running: 1) the *recorder* which captures
 and writes to Redis database, and 2) the *server* which reads the current
 image from the database and serves to requesting WebSocket clients.
 
-Run the *recorder*:
-::
+Run the *recorder*::
 
    make recorder
 
-Now (in a different shell) run the *server*:
-::
+Now (in a different shell) run the *server*::
 
    make server
    
